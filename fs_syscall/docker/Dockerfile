@@ -9,8 +9,8 @@ RUN git clone git://sourceware.org/git/newlib-cygwin.git --depth=1
 RUN for bin in ar as ld nm objcopy objdump ranlib readelf strip; do ln -s `which $bin` ${TARGET}-$bin ; done
 # INC_PATH=$(gcc --print-file-name=include)
 # -I ${INC_PATH} -nostdinc -nostdlib
-RUN echo -e "#!/bin/sh\ncc -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 \${@+\"\$@\"}" > ${TARGET}-cc
-RUN echo -e "#!/bin/sh\ngcc -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 \${@+\"\$@\"}" > ${TARGET}-gcc
+RUN bash -c 'echo -e "#!/bin/sh\ncc -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 \${@+\"\$@\"}" > ${TARGET}-cc'
+RUN bash -c 'echo -e "#!/bin/sh\ngcc -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 \${@+\"\$@\"}" > ${TARGET}-gcc'
 RUN chmod +x ${TARGET}-cc ${TARGET}-gcc
 RUN mkdir build-newlib
 WORKDIR build-newlib
