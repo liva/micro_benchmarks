@@ -1,7 +1,7 @@
 define docker_wrapper
 	docker run --rm -v ${PWD}:/workdir -w /workdir $2 $1 $3
 endef
-CONTAINER:=livadk/newlib:7ce7ec1067e49d486b61883ce24ff1a0660b0d85
+CONTAINER:=livadk/newlib:c1b9750fdea5d36d96cf73a13e61f2bee1789579
 
 INCLUDE=$(shell $(call docker_wrapper,${CONTAINER},,gcc --print-file-name=include))
 
