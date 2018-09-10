@@ -18,19 +18,6 @@ RUN env PATH="`pwd`/../:$PATH" ../newlib-cygwin/configure --target=${TARGET} --d
 RUN env PATH="`pwd`/../:$PATH" make -j$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
 RUN env PATH="`pwd`/../:$PATH" make install
 
-FROM ubuntu:16.04 AS build-linux
-
-RUN apt update
-RUN apt install -y build-essential git
-RUN mkdir /tmp_newlib
-WORKDIR /tmp_newlib
-RUN git clone git://sourceware.org/git/newlib-cygwin.git --depth=1
-RUN mkdir build-newlib
-WORKDIR build-newlib
-RUN env PATH="`pwd`/../:$PATH" ../newlib-cygwin/configure --disable-multilib --prefix=/newlib
-RUN env PATH="`pwd`/../:$PATH" make -j$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
-RUN env PATH="`pwd`/../:$PATH" make install
-
 FROM ubuntu:16.04
 MAINTAINER Shinichi Awamoto <sap.pcmail@gmail.com>
 RUN set -x \
@@ -40,9 +27,10 @@ RUN set -x \
  && apt update \
  && apt install -y \
                 build-essential \
+		strace \
 		gdb \
  && apt clean \
  && rm -rf /var/lib/apt/lists/* \
  && apt -qy autoremove
 COPY --from=build /newlib /newlib
-COPY --from=build-linux /newlib /newlib-linux
+
