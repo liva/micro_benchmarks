@@ -17,7 +17,7 @@ run: a.out
 	$(call docker_wrapper,$(CONTAINER),,./a.out)
 
 runb: b.out
-	$(call docker_wrapper,$(CONTAINER),,strace ./b.out)
+	$(call docker_wrapper,$(CONTAINER),--cap-add=SYS_PTRACE --security-opt="seccomp=unconfined",strace ./b.out)
 
 debug: a.out
 	$(call docker_wrapper,$(CONTAINER),-it,sh -c "ulimit -c unlimited; ./a.out; gdb ./a.out core")
