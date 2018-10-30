@@ -1,3 +1,5 @@
+.PHONY: env docker
+
 default:
 	diff -uprN linux-4.4.0.orig linux-4.4.0 > change.patch
 	docker run --rm -it -v $(CURDIR):/workdir tmp/gettsc_source sh -c "patch < /workdir/change.patch && fakeroot debian/rules -j 4 binary-headers binary-generic binary-perarch && cp ../*.deb /workdir"
