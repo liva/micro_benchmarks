@@ -6,8 +6,5 @@ RUN apt install -y dpkg-dev fakeroot pigz
 RUN apt source linux
 RUN tar -I pigz -cf linux.tar.gz linux-4.4.0
 WORKDIR linux-4.4.0
-RUN chmod a+x debian/rules
-RUN chmod a+x debian/scripts/*
-RUN chmod a+x debian/scripts/misc/*
-RUN fakeroot debian/rules clean
-RUN fakeroot debian/rules -j 32 binary-headers binary-generic binary-perarch
+RUN cp debian.master/config/amd64/config.flavour.generic .config
+RUN make -j32 bindeb-pkg
