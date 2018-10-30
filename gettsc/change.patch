@@ -1,0 +1,47 @@
+diff -uprN linux-4.4.0.orig/arch/x86/entry/syscalls/syscall_64.tbl linux-4.4.0/arch/x86/entry/syscalls/syscall_64.tbl
+--- linux-4.4.0.orig/arch/x86/entry/syscalls/syscall_64.tbl	2016-01-11 08:01:32.000000000 +0900
++++ linux-4.4.0/arch/x86/entry/syscalls/syscall_64.tbl	2018-10-31 01:17:15.595631610 +0900
+@@ -332,6 +332,7 @@
+ 323	common	userfaultfd		sys_userfaultfd
+ 324	common	membarrier		sys_membarrier
+ 325	common	mlock2			sys_mlock2
++400	common	gettsc			sys_gettsc
+ 
+ #
+ # x32-specific system call numbers start at 512 to avoid cache impact
+diff -uprN linux-4.4.0.orig/include/linux/syscalls.h linux-4.4.0/include/linux/syscalls.h
+--- linux-4.4.0.orig/include/linux/syscalls.h	2016-01-11 08:01:32.000000000 +0900
++++ linux-4.4.0/include/linux/syscalls.h	2018-10-31 01:17:43.931630399 +0900
+@@ -221,6 +221,7 @@ asmlinkage long sys_gettid(void);
+ asmlinkage long sys_nanosleep(struct timespec __user *rqtp, struct timespec __user *rmtp);
+ asmlinkage long sys_alarm(unsigned int seconds);
+ asmlinkage long sys_getpid(void);
++asmlinkage long sys_gettsc(void);
+ asmlinkage long sys_getppid(void);
+ asmlinkage long sys_getuid(void);
+ asmlinkage long sys_geteuid(void);
+diff -uprN linux-4.4.0.orig/kernel/sys.c linux-4.4.0/kernel/sys.c
+--- linux-4.4.0.orig/kernel/sys.c	2018-10-30 23:43:09.000000000 +0900
++++ linux-4.4.0/kernel/sys.c	2018-10-31 01:19:47.243625131 +0900
+@@ -41,6 +41,7 @@
+ #include <linux/syscore_ops.h>
+ #include <linux/version.h>
+ #include <linux/ctype.h>
++#include <linux/types.h>
+ 
+ #include <linux/compat.h>
+ #include <linux/syscalls.h>
+@@ -834,6 +835,13 @@ SYSCALL_DEFINE0(getpid)
+ 	return task_tgid_vnr(current);
+ }
+ 
++SYSCALL_DEFINE0(gettsc)
++{
++  uint64_t rax,rdx,aux;
++  asm volatile ( "rdtscp\n" : "=a" (rax), "=d" (rdx), "=c" (aux) : : );
++  return rax;
++}
++
+ /* Thread ID - the internal kernel "pid" */
+ SYSCALL_DEFINE0(gettid)
+ {
