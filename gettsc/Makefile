@@ -16,6 +16,7 @@ env:
 	docker run -d --rm -it --name gettsc_source tmp/gettsc_source sh
 	docker cp gettsc_source:/linux.tar.gz .
 	docker rm -f gettsc_source
+	rm -rf linux-4.4.0 linux-4.4.0.orig
 	tar xf linux.tar.gz
 	mv linux-4.4.0 linux-4.4.0.orig
 	tar xf linux.tar.gz

@@ -1,6 +1,6 @@
 diff -uprN linux-4.4.0.orig/arch/x86/entry/syscalls/syscall_64.tbl linux-4.4.0/arch/x86/entry/syscalls/syscall_64.tbl
 --- linux-4.4.0.orig/arch/x86/entry/syscalls/syscall_64.tbl	2016-01-11 08:01:32.000000000 +0900
-+++ linux-4.4.0/arch/x86/entry/syscalls/syscall_64.tbl	2018-10-31 01:17:15.595631610 +0900
++++ linux-4.4.0/arch/x86/entry/syscalls/syscall_64.tbl	2018-10-31 03:47:53.283800293 +0900
 @@ -332,6 +332,7 @@
  323	common	userfaultfd		sys_userfaultfd
  324	common	membarrier		sys_membarrier
@@ -11,7 +11,7 @@ diff -uprN linux-4.4.0.orig/arch/x86/entry/syscalls/syscall_64.tbl linux-4.4.0/a
  # x32-specific system call numbers start at 512 to avoid cache impact
 diff -uprN linux-4.4.0.orig/include/linux/syscalls.h linux-4.4.0/include/linux/syscalls.h
 --- linux-4.4.0.orig/include/linux/syscalls.h	2016-01-11 08:01:32.000000000 +0900
-+++ linux-4.4.0/include/linux/syscalls.h	2018-10-31 01:17:43.931630399 +0900
++++ linux-4.4.0/include/linux/syscalls.h	2018-10-31 03:47:53.287800293 +0900
 @@ -221,6 +221,7 @@ asmlinkage long sys_gettid(void);
  asmlinkage long sys_nanosleep(struct timespec __user *rqtp, struct timespec __user *rmtp);
  asmlinkage long sys_alarm(unsigned int seconds);
@@ -22,7 +22,7 @@ diff -uprN linux-4.4.0.orig/include/linux/syscalls.h linux-4.4.0/include/linux/s
  asmlinkage long sys_geteuid(void);
 diff -uprN linux-4.4.0.orig/kernel/sys.c linux-4.4.0/kernel/sys.c
 --- linux-4.4.0.orig/kernel/sys.c	2018-10-30 23:43:09.000000000 +0900
-+++ linux-4.4.0/kernel/sys.c	2018-10-31 01:19:47.243625131 +0900
++++ linux-4.4.0/kernel/sys.c	2018-10-31 03:47:53.287800293 +0900
 @@ -41,6 +41,7 @@
  #include <linux/syscore_ops.h>
  #include <linux/version.h>
@@ -45,3 +45,15 @@ diff -uprN linux-4.4.0.orig/kernel/sys.c linux-4.4.0/kernel/sys.c
  /* Thread ID - the internal kernel "pid" */
  SYSCALL_DEFINE0(gettid)
  {
+diff -uprN linux-4.4.0.orig/Makefile linux-4.4.0/Makefile
+--- linux-4.4.0.orig/Makefile	2018-10-30 23:43:09.000000000 +0900
++++ linux-4.4.0/Makefile	2018-10-31 03:49:19.747796599 +0900
+@@ -1,7 +1,7 @@
+ VERSION = 4
+ PATCHLEVEL = 4
+ SUBLEVEL = 155
+-EXTRAVERSION =
++EXTRAVERSION = gettsc
+ NAME = Blurry Fish Butt
+ 
+ # *DOCUMENTATION*

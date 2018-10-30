@@ -6,5 +6,6 @@ RUN apt install -y dpkg-dev fakeroot pigz
 RUN apt source linux
 RUN tar -I pigz -cf linux.tar.gz linux-4.4.0
 WORKDIR linux-4.4.0
-RUN cp debian.master/config/amd64/config.flavour.generic .config
-RUN make -j32 bindeb-pkg
+RUN sh -c "cat debian.master/config/amd64/config.common.amd64 debian.master/config/amd64/config.flavour.generic debian.master/config/config.common.ubuntu > .config"
+RUN scripts/config --disable DEBUG_INFO
+RUN make -j32 bzImage modules
