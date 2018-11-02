@@ -7,7 +7,7 @@ patch:
 	docker run --rm -it -v $(CURDIR):/workdir tmp/gettsc_source sh -c "patch -p1 < /workdir/change.patch && make -j32 bindeb-pkg && cp ../*.deb /workdir"
 
 test:
-	g++ -Wall --std=c++14 main.cc
+	g++ -O3 -Wall --std=c++14 main.cc
 	./a.out
 
 env:
