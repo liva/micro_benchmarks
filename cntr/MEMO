@@ -1,0 +1,15 @@
+$ docker build -t slimfs .
+
+$ docker images
+REPOSITORY                         TAG                 IMAGE ID            CREATED             SIZE
+slimfs                             latest              457c5aa7b8da        2 minutes ago       677MB
+
+$ docker build -t fatfs_img fatfs
+$ docker run -d --rm -it --name fatfs_container fatfs_img sh
+$ docker cp fatfs_container:/fs.tar .
+$ docker rm -f fatfs_container
+
+$ docker run --rm --device /dev/fuse --cap-add SYS_ADMIN -it -v ${PWD}:/workdir -w /workdir slimfs sh
+-> mountできない
+
+結論、fuseが動かないから無理
